@@ -126,8 +126,10 @@ function isEmptyObject(obj) {
  *    immutableObj.newProp = 'new';
  *    console.log(immutableObj) => {a: 1, b: 2}
  */
-function makeImmutable(/* obj */) {
-  throw new Error('Not implemented');
+function makeImmutable(obj) {
+  const newObj = { ...obj };
+  Object.freeze(newObj);
+  return newObj;
 }
 
 /**
@@ -140,8 +142,17 @@ function makeImmutable(/* obj */) {
  *    makeWord({ a: [0, 1], b: [2, 3], c: [4, 5] }) => 'aabbcc'
  *    makeWord({ H:[0], e: [1], l: [2, 3, 8], o: [4, 6], W:[5], r:[7], d:[9]}) => 'HelloWorld'
  */
-function makeWord(/* lettersObject */) {
-  throw new Error('Not implemented');
+function makeWord(lettersObject) {
+  return Object.keys(lettersObject)
+    .reduce((accArr, key) => {
+      const result = [...accArr];
+      const letterIndex = lettersObject[key];
+      for (let i = 0; i < letterIndex.length; i += 1) {
+        result[letterIndex[i]] = key;
+      }
+      return result;
+    }, [])
+    .join('');
 }
 
 /**
@@ -158,8 +169,16 @@ function makeWord(/* lettersObject */) {
  *    sellTickets([25, 25, 50]) => true
  *    sellTickets([25, 100]) => false (The seller does not have enough money to give change.)
  */
-function sellTickets(/* queue */) {
-  throw new Error('Not implemented');
+function sellTickets(queue) {
+  const TICKET_COST = 25;
+  const result = queue.reduce((acc, el) => {
+    const change = el - TICKET_COST;
+    if (change === 0) {
+      return acc + TICKET_COST;
+    }
+    return acc - change + TICKET_COST;
+  }, 0);
+  return result >= 0;
 }
 
 /**
